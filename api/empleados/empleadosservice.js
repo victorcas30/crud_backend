@@ -36,7 +36,6 @@ const updateEmpleado = (values, callBack) => {
                 apellido='${values.apellido}',
                 dui='${values.dui}',
                 fechanacimiento='${values.fechanacimiento}',
-                iddepartamento=${values.iddepartamento}
             WHERE id = ${values.id};`;
     dbconnection.query(updateQuery, (error, result) => {
         if (error) {
@@ -48,7 +47,7 @@ const updateEmpleado = (values, callBack) => {
 }
 
 const getUnEmpleado = (values, callBack) => {
-    const myQuery = 'SELECT id, nombre, apellido, dui, fechanacimiento, iddepartamento FROM empleados WHERE id = ?';
+    const myQuery = 'SELECT id, nombre, apellido, dui, fechanacimiento FROM empleados WHERE id = ?';
     dbconnection.query(myQuery, values, (error, result) => {
         if (!error) {
             return callBack(null, result);
