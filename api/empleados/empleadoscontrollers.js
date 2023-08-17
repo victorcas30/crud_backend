@@ -1,4 +1,4 @@
-import { getEmpleados, createEmpleado, updateEmpleado, getUnEmpleado, deleteEmpleado, getEmpleadosPromise } from "./empleadosservice.js";
+import { getEmpleados, createEmpleado, updateEmpleado, getUnEmpleado, deleteEmpleado, getEmpleadosPromise, getEmpleadosPorBusqueda } from "./empleadosservice.js";
 
 const createElEmpleado = (req, res) => {
     const values = Object.values(req.body);
@@ -12,14 +12,29 @@ const createElEmpleado = (req, res) => {
 }
 
 const getLosEmpleados = (req, res) => {
-    getEmpleados((errors, result) => {
-        if (errors) {
-            return res.status(500).json({ success: false, message: errors });
-        } else {
-            return res.status(200).json({ success: 1, empleados: result });
-        }
-    });
-}
+    const searchText = req.query.search; // Obtiene el parámetro de búsqueda desde la URL
+    
+    if (searchText) {
+        // Si hay texto de búsqueda, utiliza la función para buscar empleados
+        getEmpleadosPorBusqueda(searchText, (errors, result) => {
+            if (errors) {
+                return res.status(500).json({ success: false, message: errors });
+            } else {
+                return res.status(200).json({ success: true, empleados: result });
+            }
+        });
+    } else {
+        // Si no hay texto de búsqueda, obtén todos los empleados
+        getEmpleados((errors, result) => {
+            if (errors) {
+                return res.status(500).json({ success: false, message: errors });
+            } else {
+                return res.status(200).json({ success: true, empleados: result });
+            }
+        });
+    }
+};
+
 
 const setUpdateEmpleado = (req, res) => {
     const values = req.body;

@@ -28,6 +28,17 @@ const getEmpleados = (callBack) => {
     });
 }
 
+const getEmpleadosPorBusqueda = (searchText, callBack) => {
+    const myQuery = `SELECT * FROM empleados WHERE nombre LIKE '%${searchText}%' OR apellido LIKE '%${searchText}%'`;
+    dbconnection.query(myQuery, (error, result) => {
+        if (error) {
+            return callBack(error);
+        } else {
+            return callBack(error, result);
+        }
+    });
+};
+
 const updateEmpleado = (values, callBack) => {
     const updateQuery = `
         UPDATE empleados 
@@ -81,6 +92,7 @@ const getEmpleadosPromise = () => {
 
 export {
     getEmpleados,
+    getEmpleadosPorBusqueda,
     createEmpleado,
     updateEmpleado,
     getUnEmpleado,
