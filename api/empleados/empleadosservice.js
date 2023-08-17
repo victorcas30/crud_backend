@@ -35,7 +35,7 @@ const updateEmpleado = (values, callBack) => {
                 nombre='${values.nombre}',
                 apellido='${values.apellido}',
                 dui='${values.dui}',
-                fechanacimiento='${values.fechanacimiento}',
+                fechanacimiento='${values.fechanacimiento}'
             WHERE id = ${values.id};`;
     dbconnection.query(updateQuery, (error, result) => {
         if (error) {
