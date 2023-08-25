@@ -9,35 +9,49 @@ const createEmpleado = (values, callBack) => {
         dui,
         fechanacimiento
         ) VALUES(?,?,?,?);`;
-    dbconnection.query(insertQuery, values, (error, result) => {
+
+    const connection = dbconnection; // Abrir la conexión
+
+    connection.query(insertQuery, values, (error, result) => {
         if (error) {
-            return callBack(error, result);
+            callBack(error, result);
+        } else {
+            callBack(null, result);
         }
-        return callBack(null, result);
+        connection.end(); // Cerrar la conexión después de la consulta
     });
 }
 
 const getEmpleados = (callBack) => {
     const myQuery = 'SELECT * FROM empleados';
-    dbconnection.query(myQuery, (error, result) => {
+
+    const connection = dbconnection; // Abrir la conexión
+
+    connection.query(myQuery, (error, result) => {
         if (error) {
-            return callBack(error);
+            callBack(error);
         } else {
-            return callBack(error, result);
+            callBack(null, result);
         }
+        connection.end(); // Cerrar la conexión después de la consulta
     });
 }
 
 const getEmpleadosPorBusqueda = (searchText, callBack) => {
     const myQuery = `SELECT * FROM empleados WHERE nombre LIKE '%${searchText}%' OR apellido LIKE '%${searchText}%'`;
-    dbconnection.query(myQuery, (error, result) => {
+
+    const connection = dbconnection; // Abrir la conexión
+
+    connection.query(myQuery, (error, result) => {
         if (error) {
-            return callBack(error);
+            callBack(error);
         } else {
-            return callBack(error, result);
+            callBack(null, result);
         }
+        connection.end(); // Cerrar la conexión después de la consulta
     });
-};
+}
+
 
 const updateEmpleado = (values, callBack) => {
     const updateQuery = `
@@ -48,38 +62,51 @@ const updateEmpleado = (values, callBack) => {
                 dui='${values.dui}',
                 fechanacimiento='${values.fechanacimiento}'
             WHERE id = ${values.id};`;
-    dbconnection.query(updateQuery, (error, result) => {
+
+    const connection = dbconnection; // Abrir la conexión
+
+    connection.query(updateQuery, (error, result) => {
         if (error) {
             callBack(error, result);
-            return;
+        } else {
+            callBack(null, result);
         }
-        return callBack(null, result);
+        connection.end(); // Cerrar la conexión después de la consulta
     });
 }
 
 const getUnEmpleado = (values, callBack) => {
     const myQuery = 'SELECT id, nombre, apellido, dui, fechanacimiento FROM empleados WHERE id = ?';
-    dbconnection.query(myQuery, values, (error, result) => {
+
+    const connection = dbconnection; // Abrir la conexión
+
+    connection.query(myQuery, values, (error, result) => {
         if (!error) {
-            return callBack(null, result);
+            callBack(null, result);
         } else {
-            return callBack(error);
+            callBack(error);
         }
+        connection.end(); // Cerrar la conexión después de la consulta
     });
 }
 
 const deleteEmpleado = (values, callBack) => {
     const updateQuery = `
         DELETE FROM empleados 
-        WHERE id = ${values.id};`;
-    dbconnection.query(updateQuery, (error, result) => {
+        WHERE id = ?`;
+
+    const connection = dbconnection; // Abrir la conexión
+
+    connection.query(updateQuery, values.id, (error, result) => {
         if (error) {
             callBack(error, result);
-            return;
+        } else {
+            callBack(null, result);
         }
-        return callBack(null, result);
+        connection.end(); // Cerrar la conexión después de la consulta
     });
 }
+
 
 const getEmpleadosPromise = () => {
     return new Promise((resolve, reject) => {
